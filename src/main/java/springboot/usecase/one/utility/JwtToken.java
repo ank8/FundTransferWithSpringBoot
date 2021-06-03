@@ -15,7 +15,7 @@ import springboot.usecase.one.exception.CustomExceptionHandler;
 
 public class JwtToken {
 	private JwtToken() {
-		throw new CustomExceptionHandler("JwtToken class exception");
+		throw new CustomExceptionHandler("802","JwtToken class exception");
 	}
 
 	
@@ -37,7 +37,7 @@ public class JwtToken {
 			Claims claims = Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(token).getBody();
 			return Integer.parseInt(claims.get("customerId").toString());
 		} catch (Exception e) {
-			throw new CustomExceptionHandler("Invalid Token");
+			throw new CustomExceptionHandler("999","Invalid Token");
 		}
 	}
 }

@@ -52,35 +52,35 @@ public class PaymentServiceUtility {
 	
 	public void checkPayerAccDetails(CustomerAccount payerAcc) {
 		if (payerAcc == null) {
-			throw new CustomExceptionHandler(StatusMsgConstants.PAYER_ACC_NOT_FOUND);
+			throw new CustomExceptionHandler("713",StatusMsgConstants.PAYER_ACC_NOT_FOUND);
 		}
 		Optional<BankCatalog> payerBank = bankCatalogRepository.findByBankCode(payerAcc.getBankCode());
 		if (payerBank.isPresent()) {
 			if (!payerBank.get().getActive().equals("A")) {
-				throw new CustomExceptionHandler(StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_INACTIVE);
+				throw new CustomExceptionHandler("714",StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_INACTIVE);
 			}
 		} else {
-			throw new CustomExceptionHandler(StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_NOT_EXIST);
+			throw new CustomExceptionHandler("715",StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_NOT_EXIST);
 		}
 	}
 	public void checkBenAccDetails(CustomerAccount benificiaryAcc) {
 		if (benificiaryAcc == null) {
-			throw new CustomExceptionHandler(StatusMsgConstants.BEN_ACC_NOT_FOUND);
+			throw new CustomExceptionHandler("716",StatusMsgConstants.BEN_ACC_NOT_FOUND);
 		}
 		Optional<BankCatalog> benBank = bankCatalogRepository.findByBankCode(benificiaryAcc.getBankCode());
 		if (benBank.isPresent()) {
 			if (!benBank.get().getActive().equals("A")) {
-				throw new CustomExceptionHandler(
+				throw new CustomExceptionHandler("717",
 						StatusMsgConstants.BENIFICIARY + " " + StatusMsgConstants.BANK_INACTIVE);
 			}
 		} else {
-			throw new CustomExceptionHandler(StatusMsgConstants.BENIFICIARY + " " + StatusMsgConstants.BANK_NOT_EXIST);
+			throw new CustomExceptionHandler("718",StatusMsgConstants.BENIFICIARY + " " + StatusMsgConstants.BANK_NOT_EXIST);
 		}
 	}
 	
 	public void checkPayerAccount(CustomerAccount payerAcc) {
 		if (payerAcc == null) {
-			throw new CustomExceptionHandler(StatusMsgConstants.PAYER_ACC_NOT_FOUND);
+			throw new CustomExceptionHandler("719",StatusMsgConstants.PAYER_ACC_NOT_FOUND);
 		}
 	}
 

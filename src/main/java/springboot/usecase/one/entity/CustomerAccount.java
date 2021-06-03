@@ -19,6 +19,7 @@ public class CustomerAccount {
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	//mapping required here
 	@Column(name = "CUST_ID")
 	@NotNull
 	private Long custId;

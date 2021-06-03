@@ -5,7 +5,7 @@ import springboot.usecase.one.exception.CustomExceptionHandler;
 public class CommonConstants {
 
 	private CommonConstants() {
-		throw new CustomExceptionHandler("CommonConstants class exception");
+		throw new CustomExceptionHandler("803","CommonConstants class exception");
 	}
 
 	public static final String BASE_PATH = "/v1/api";

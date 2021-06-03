@@ -12,7 +12,7 @@ import springboot.usecase.one.exception.CustomExceptionHandler;
 
 public class CommonUtility {
 	private CommonUtility() {
-		throw new CustomExceptionHandler("CommonUtility class exception");
+		throw new CustomExceptionHandler("801","CommonUtility class exception");
 	}
 
 	public static String getSHA512(String pwd) throws NoSuchAlgorithmException {

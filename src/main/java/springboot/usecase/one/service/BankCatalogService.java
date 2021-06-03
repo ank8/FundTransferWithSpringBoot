@@ -24,7 +24,7 @@ public class BankCatalogService {
 		ExampleMatcher modelMatcher = ExampleMatcher.matching().withIgnorePaths("id").withIgnorePaths("active");
 		boolean flag = bankCatalogRepository.exists(Example.of(bank, modelMatcher));
 		if (flag) {
-			throw new CustomExceptionHandler(StatusMsgConstants.BANK_ALREADY_EXIST);
+			throw new CustomExceptionHandler("703",StatusMsgConstants.BANK_ALREADY_EXIST);
 		}
 		return bankCatalogRepository.save(bank);
 	}
@@ -40,7 +40,7 @@ public class BankCatalogService {
 		if (flag) {
 			return bankCatalogRepository.save(bank);
 		}
-		throw new CustomExceptionHandler(StatusMsgConstants.BANK_NOT_EXIST);
+		throw new CustomExceptionHandler("704",StatusMsgConstants.BANK_NOT_EXIST);
 	}
 
 	public String deleteBank(Long id) {

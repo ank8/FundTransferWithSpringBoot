@@ -1,11 +1,12 @@
 package springboot.usecase.one.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -30,7 +31,7 @@ import springboot.usecase.one.models.LoginRequest;
 import springboot.usecase.one.service.CustomerService;
 import springboot.usecase.one.utility.JwtToken;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(value = CustomerController.class)
 class CustomerControllerTests {
 
@@ -53,8 +54,8 @@ class CustomerControllerTests {
 				.content(mockContent).contentType(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
-		Assert.assertEquals(HttpStatus.OK.value(), response.getStatus());
-		Assert.assertEquals(StatusMsgConstants.REGISTER_SUCCESS, response.getContentAsString());
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		assertEquals(StatusMsgConstants.REGISTER_SUCCESS, response.getContentAsString());
 	}
 
 	@Test
@@ -71,10 +72,10 @@ class CustomerControllerTests {
 				.accept(MediaType.APPLICATION_JSON).content(mockContent).contentType(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
-		Assert.assertEquals(HttpStatus.OK.value(), response.getStatus());
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
 		String strResp = result.getResponse().getContentAsString();
 		String msg = JsonPath.parse(strResp).read("$." + StatusMsgConstants.MSG);
-		Assert.assertEquals(StatusMsgConstants.LOGIN_SUCCESS, msg);
+		assertEquals(StatusMsgConstants.LOGIN_SUCCESS, msg);
 
 	}
 
