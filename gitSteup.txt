@@ -1,0 +1,37 @@
+Download sonar ===> https://binaries.sonarsource.com/SonarLint-for-Eclipse/releases/
+
+=================================================================================================================================
+
+
+Git Authentication Setup==>
+
+git config --global http.sslVerify false
+
+ssh-keygen -t ed25519 -C "ankitsingh369156@gmail.com"
+
+ls -al ~/.ssh
+
+eval `ssh-agent -s`
+
+ssh-add ~/.ssh/id_ed25519
+
+clip < ~/.ssh/id_ed25519.pub
+
+
+
+
+
+========================?
+ssh-keygen
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCmf7IrBkYNG9NmQ0qakrEk0BSzqOeC9Up8xBumMJoRmKnHfRMKuPyJGx67+2Rep0qewHN9gu5jIeK+vf8tGIU2cuksLk7cLdzpOZPh7tcMqUaCTjUGOIlPLvUBQZpndtt0NME+umzIoo4EA0WwmTD+vEoANteBSor5xDZtTFGN0XeyY+ryEq70rBNXtCk84nA9HRrokhL7g8hhUzwzUNkZ4jgnoV6baBxpYY5jy3DOnqdx4oaQ2lvOHgibaRyGGTXG9SgZofCbpxaUw0qmTC6rPaiKL6jvpWWl04bBo3UXXHgBH7HK77qmHYAzGXxCDGypJTOF86Aa5jjNMWMa8ZpGHKmL9TTrfshHxDSYWA0ABEJzF/npk8gzL3w0PhQ7lgs3hhoYT14BnL0B38nDXhmmqkLB2iHO8JM0v5ydjYqLDC1+cOBYjmqEC41M0dzCoWrWez0oLrq6SKRyggojwsi3tiXqv1gul6aVtvUhXoQwRXaGzMwURSBywntKi8Y2Vh0= ankitsingh_a@LP-PF2831Z7
+
+
+
+ssh -vT git@github.com
+ssh -T git@github.com
+
+
+
+add this ssh key to github.............then try again clone and perform operations
