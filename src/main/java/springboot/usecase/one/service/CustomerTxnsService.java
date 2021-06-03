@@ -50,19 +50,19 @@ public class CustomerTxnsService {
 		if (payerId != 0) {
 			BigDecimal txnAmt = paymentTxnRequest.getAmt();
 			if (txnAmt.compareTo(BigDecimal.ONE) < 0) {
-				throw new CustomExceptionHandler(StatusMsgConstants.AMT_SHOULD_GREATER_THHEN_ZERO);
+				throw new CustomExceptionHandler("710",StatusMsgConstants.AMT_SHOULD_GREATER_THHEN_ZERO);
 			}
 			String mobNumber = paymentTxnRequest.getMob();
 			CustomerAccount payerAcc = customerAccountRepository.findByCustId(payerId);
 			commonPaymentUtility.checkPayerAccDetails(payerAcc);
 			Customer benificiary = customerRepository.findByMobile(mobNumber);
 			if (benificiary == null) {
-				throw new CustomExceptionHandler(StatusMsgConstants.BEN_NOT_FOUND);
+				throw new CustomExceptionHandler("711",StatusMsgConstants.BEN_NOT_FOUND);
 			}
 			CustomerAccount benificiaryAcc = customerAccountRepository.findByCustId(benificiary.getId());
 			commonPaymentUtility.checkBenAccDetails(benificiaryAcc);
 			if (payerAcc.getAccountBalance().compareTo(txnAmt) < 0) {
-				throw new CustomExceptionHandler(StatusMsgConstants.INSUFFICIENT_BAL);
+				throw new CustomExceptionHandler("712",StatusMsgConstants.INSUFFICIENT_BAL);
 			}
 			commonPaymentUtility.paymentProcessing(payerAcc, benificiaryAcc, txnAmt);
 

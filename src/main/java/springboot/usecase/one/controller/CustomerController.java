@@ -31,7 +31,7 @@ public class CustomerController {
 		try {
 			return customerService.addCustomer(customerMdl);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CustomExceptionHandler(StatusMsgConstants.INTERNAL_ERR);
+			throw new CustomExceptionHandler("701",StatusMsgConstants.INTERNAL_ERR);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class CustomerController {
 		try {
 			return customerService.loginValidate(login);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CustomExceptionHandler(StatusMsgConstants.INTERNAL_ERR);
+			throw new CustomExceptionHandler("702",StatusMsgConstants.INTERNAL_ERR);
 		}
 	}
 }

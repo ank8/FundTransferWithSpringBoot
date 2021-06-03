@@ -4,7 +4,7 @@ import springboot.usecase.one.exception.CustomExceptionHandler;
 
 public class StatusMsgConstants {
 	private StatusMsgConstants() {
-		throw new CustomExceptionHandler("StatusMsgConstants class exception");
+		throw new CustomExceptionHandler("804","StatusMsgConstants class exception");
 	}
 	public static final String INVALID_TOKEN = "Invalid Token";
 	public static final String ACC_ADD_SUCCESS = "Account Added Successfully";

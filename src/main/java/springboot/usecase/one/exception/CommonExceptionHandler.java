@@ -38,6 +38,11 @@ public class CommonExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleCommonExceptionHandler(CustomExceptionHandler ex, WebRequest request) {
 		return buildResponse(new ApiErrorRespnseFormatter(HttpStatus.BAD_REQUEST, ex));
 	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<Object> handleCommonExceptionHandler(RuntimeException ex, WebRequest request) {
+		return buildResponse(new ApiErrorRespnseFormatter(HttpStatus.BAD_REQUEST, ex));
+	}
 
 	private ResponseEntity<Object> buildResponse(ApiErrorRespnseFormatter err) {
 		return new ResponseEntity<>(err, err.getStatus());

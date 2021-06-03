@@ -2,6 +2,7 @@ package springboot.usecase.one.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class CustomerService {
 		Optional<Customer> customerData = customerRepository.findByMobileOrEmail(customer.getMobile(),
 				customer.getEmail());
 		if (customerData.isPresent()) {
-			throw new CustomExceptionHandler(StatusMsgConstants.DUPLICATE_ENTRY_NOT_ALLOWED);
+			throw new CustomExceptionHandler("710",StatusMsgConstants.DUPLICATE_ENTRY_NOT_ALLOWED);
 		}
 		String pwd = customer.getPwd();
 		pwd = CommonUtility.getSHA512(pwd);
@@ -52,13 +53,12 @@ public class CustomerService {
 		login.setPwd(pwd);
 		Optional<Customer> custList = customerRepository.findByPwdAndEmail(pwd, login.getEmail());
 		if (custList.isPresent()) {
-			custList.stream().forEach(data -> {
-				map.put(StatusMsgConstants.MSG, StatusMsgConstants.LOGIN_SUCCESS);
-				map.put(StatusMsgConstants.PERSONAL_INFO, data);
-				map.put(StatusMsgConstants.TOKEN, JwtToken.createToken(data.getId(),CommonConstants.JWT_TOKEN_EXP));
-				CustomerAccount acc = customerAccountRepository.findByCustId(data.getId());
-				map.put(StatusMsgConstants.ACC_INFO, acc);
-			});
+			Customer customer = custList.get();
+			map.put(StatusMsgConstants.MSG, StatusMsgConstants.LOGIN_SUCCESS);
+			map.put(StatusMsgConstants.PERSONAL_INFO, customer);
+			map.put(StatusMsgConstants.TOKEN, JwtToken.createToken(customer.getId(), CommonConstants.JWT_TOKEN_EXP));
+			CustomerAccount acc = customerAccountRepository.findByCustId(customer.getId());
+			map.put(StatusMsgConstants.ACC_INFO, acc);
 		} else {
 			map.put(StatusMsgConstants.MSG, StatusMsgConstants.LOGIN_FAIL);
 		}

@@ -45,21 +45,21 @@ public class CustomerAccountService {
 							.withIgnorePaths("accountBalance");
 					boolean flag = customerAccountRepository.exists(Example.of(acnt, modelMatcher));
 					if (flag) {
-						throw new CustomExceptionHandler(StatusMsgConstants.RECORD_ALREADY_EXIST);
+						throw new CustomExceptionHandler("705", StatusMsgConstants.RECORD_ALREADY_EXIST);
 					} else {
 						acnt.setBankCode(bankDtl.get().getBankCode());
 						acnt.setAccountBalance(new BigDecimal(CommonConstants.DEFAULT_AMT));
 						customerAccountRepository.save(acnt);
 					}
 				} else {
-					throw new CustomExceptionHandler(StatusMsgConstants.BANK_INACTIVE);
+					throw new CustomExceptionHandler("706", StatusMsgConstants.BANK_INACTIVE);
 				}
 			} else {
-				throw new CustomExceptionHandler(StatusMsgConstants.BANK_NOT_EXIST);
+				throw new CustomExceptionHandler("707", StatusMsgConstants.BANK_NOT_EXIST);
 			}
 
 		} else {
-			throw new CustomExceptionHandler(StatusMsgConstants.INVALID_TOKEN);
+			throw new CustomExceptionHandler("708", StatusMsgConstants.INVALID_TOKEN);
 		}
 		return StatusMsgConstants.ACC_ADD_SUCCESS;
 
@@ -73,7 +73,7 @@ public class CustomerAccountService {
 			map.put("data", custAcnt);
 			return new ResponseEntity<>(map, HttpStatus.OK);
 		} else {
-			throw new CustomExceptionHandler(StatusMsgConstants.INVALID_TOKEN);
+			throw new CustomExceptionHandler("709", StatusMsgConstants.INVALID_TOKEN);
 		}
 	}
 
