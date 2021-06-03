@@ -3,11 +3,13 @@ Download sonar ===> https://binaries.sonarsource.com/SonarLint-for-Eclipse/relea
 =================================================================================================================================
 
 
-Git Authentication Setup==>
+Git commands to enable git push on HCL system Setup(Now its working for me)==>
+
+Open your git bash.
 
 git config --global http.sslVerify false
 
-ssh-keygen -t ed25519 -C "ankitsingh369156@gmail.com"
+ssh-keygen -t ed25519 -C "xyz123@gmail.com"  
 
 ls -al ~/.ssh
 
@@ -17,11 +19,28 @@ ssh-add ~/.ssh/id_ed25519
 
 clip < ~/.ssh/id_ed25519.pub
 
+Above command copy the key.
+Go inside your github on browser goto the setting-->SSH and GPG keys-->new ssh key--> ctrl+paste and add.
 
 
+List your existing remotes in order to get the name of the remote you want to change.
+git remote -v
+origin  https://github.com/USER/ProjectName.git (fetch)
+origin  https://github.com/USER/ProjectName.git (push)
+
+Now goto your project in git and copy the clone path from SSH instead of https.
+
+git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+
+check Again, List your existing remotes in order to get the name of the remote you want to change.
+
+git remote -v
+
+origin  git@github.com:USERNAME/REPOSITORY.git (fetch)
+origin  git@github.com:USERNAME/REPOSITORY.git (push)
 
 
-========================?
+===============================
 ssh-keygen
 
 
@@ -31,6 +50,23 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCmf7IrBkYNG9NmQ0qakrEk0BSzqOeC9Up8xBumMJoR
 
 ssh -vT git@github.com
 ssh -T git@github.com
+
+===============================
+create a new repository on the command line
+echo "# check-data" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:ank8/check-data.git
+git push -u origin main
+
+===========================
+push an existing repository from the command line
+git remote add origin git@github.com:ank8/check-data.git
+git branch -M main
+git push -u origin main
+
 
 
 
