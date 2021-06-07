@@ -2,30 +2,53 @@ package springboot.usecase.one.models;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class PaymentTxnRequest {
-	@NotEmpty(message = "Token is Mandatory")
-	private String token;
-	@NotEmpty(message = "Mobile No is Mandatory")
-	private String mob;
-	
+	@NotNull(message = "Customer Id is Mandatory")
+	private long custId;
+
+	@NotNull(message = "Customer Account Id is Mandatory")
+	private long custAccId;
+
+	@NotNull(message = "Customer Account Beneficiary Id is Mandatory")
+	private long custAccBenId;
+
+	private String remark;
+
+	@NotNull(message = "Amount is Mandatory")
 	private BigDecimal amt;
 
-	public String getToken() {
-		return token;
+	public long getCustId() {
+		return custId;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setCustId(long custId) {
+		this.custId = custId;
 	}
 
-	public String getMob() {
-		return mob;
+	public long getCustAccId() {
+		return custAccId;
 	}
 
-	public void setMob(String mob) {
-		this.mob = mob;
+	public void setCustAccId(long custAccId) {
+		this.custAccId = custAccId;
+	}
+
+	public long getCustAccBenId() {
+		return custAccBenId;
+	}
+
+	public void setCustAccBenId(long custAccBenId) {
+		this.custAccBenId = custAccBenId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public BigDecimal getAmt() {
@@ -35,15 +58,5 @@ public class PaymentTxnRequest {
 	public void setAmt(BigDecimal amt) {
 		this.amt = amt;
 	}
-
-	public PaymentTxnRequest(@NotEmpty(message = "Token is Mandatory") String token,
-			@NotEmpty(message = "Mobile No is Mandatory") String mob, BigDecimal amt) {
-		super();
-		this.token = token;
-		this.mob = mob;
-		this.amt = amt;
-	}
-	
-	
 
 }

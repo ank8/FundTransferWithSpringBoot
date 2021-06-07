@@ -6,14 +6,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import springboot.usecase.one.constants.CommonConstants;
+import springboot.usecase.one.models.GetPaymentTxnRequest;
 import springboot.usecase.one.models.PaymentTxnRequest;
 import springboot.usecase.one.service.CustomerTxnsService;
 
@@ -25,15 +25,16 @@ public class CustomerTxnsController {
 	CustomerTxnsService customerTxnsService;
 
 	@PostMapping(CommonConstants.CUSTOMER_TXN_PATH)
-	public String payCustomer(@Valid @RequestBody PaymentTxnRequest paymentTxnRequest) {
-		return customerTxnsService.payCustomer(paymentTxnRequest);
+	public ResponseEntity<Map<String, Object>> payCustomer(@RequestHeader(CommonConstants.TOKEN) String token,
+			@Valid @RequestBody PaymentTxnRequest paymentTxnRequest) {
+		return customerTxnsService.payCustomer(token, paymentTxnRequest);
 
 	}
 
-	@GetMapping(CommonConstants.CUSTOMER_TXN_PATH + CommonConstants.PATH_VARIABLE)
-	public ResponseEntity<Map<String, Object>> getTransaction(@PathVariable String token) {
-		return customerTxnsService.getTransaction(token);
-
+	@PostMapping(CommonConstants.CUSTOMER_TXN_PATH + CommonConstants.HISTORY)
+	public ResponseEntity<Map<String, Object>> getTransaction(@RequestHeader(CommonConstants.TOKEN) String token,
+			@RequestBody GetPaymentTxnRequest getPaymentTxnRequest) {
+		return customerTxnsService.getTransaction(token, getPaymentTxnRequest);
 	}
 
 }

@@ -11,11 +11,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import springboot.usecase.one.constants.CommonConstants;
+import springboot.usecase.one.constants.StatusMsgConstants;
+import springboot.usecase.one.constants.StatusMsgConstants.ErrorCode;
 import springboot.usecase.one.exception.CustomExceptionHandler;
 
 public class JwtToken {
 	private JwtToken() {
-		throw new CustomExceptionHandler("802","JwtToken class exception");
+		throw new CustomExceptionHandler(ErrorCode.ERR_CD_802,StatusMsgConstants.JWT_TKN_EXCP);
 	}
 
 	

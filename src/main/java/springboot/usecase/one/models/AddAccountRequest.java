@@ -4,14 +4,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddAccountRequest {
+	@NotNull(message = "Customer is Mandatory")
+	private long custId;
 	@NotEmpty(message = "Account Number is Mandatory")
 	private String accountNumber;
 	@NotEmpty(message = "Ifsc is Mandatory")
 	private String accountIfsc;
 	@NotNull(message = "Bank Code is Mandatory")
 	private Long bankCode;
-	@NotEmpty(message = "Token is Mandatory")
-	private String token;
 
 	public String getAccountNumber() {
 		return accountNumber;
@@ -29,14 +29,6 @@ public class AddAccountRequest {
 		this.accountIfsc = accountIfsc;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	public Long getBankCode() {
 		return bankCode;
 	}
@@ -45,15 +37,12 @@ public class AddAccountRequest {
 		this.bankCode = bankCode;
 	}
 
-	public AddAccountRequest(@NotEmpty(message = "Account Number is Mandatory") String accountNumber,
-			@NotEmpty(message = "Ifsc is Mandatory") String accountIfsc,
-			@NotNull(message = "Bank Code is Mandatory") Long bankCode,
-			@NotEmpty(message = "Token is Mandatory") String token) {
-		super();
-		this.accountNumber = accountNumber;
-		this.accountIfsc = accountIfsc;
-		this.bankCode = bankCode;
-		this.token = token;
+	public long getCustId() {
+		return custId;
+	}
+
+	public void setCustId(long custId) {
+		this.custId = custId;
 	}
 
 }

@@ -22,7 +22,7 @@ public class CommonExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		ex.getBindingResult().getAllErrors()
 				.forEach(err -> map.put(((FieldError) err).getField(), err.getDefaultMessage()));
 		return buildResponse(new ApiErrorRespnseFormatter(HttpStatus.BAD_REQUEST, map));
@@ -36,15 +36,15 @@ public class CommonExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(CustomExceptionHandler.class)
 	public ResponseEntity<Object> handleCommonExceptionHandler(CustomExceptionHandler ex, WebRequest request) {
-		return buildResponse(new ApiErrorRespnseFormatter(HttpStatus.BAD_REQUEST, ex));
+		return buildResponse(new ApiErrorRespnseFormatter(ex));
 	}
-	
+
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Object> handleCommonExceptionHandler(RuntimeException ex, WebRequest request) {
 		return buildResponse(new ApiErrorRespnseFormatter(HttpStatus.BAD_REQUEST, ex));
 	}
 
 	private ResponseEntity<Object> buildResponse(ApiErrorRespnseFormatter err) {
-		return new ResponseEntity<>(err, err.getStatus());
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 	}
 }

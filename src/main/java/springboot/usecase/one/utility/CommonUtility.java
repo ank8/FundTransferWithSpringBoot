@@ -8,11 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import springboot.usecase.one.constants.CommonConstants;
+import springboot.usecase.one.constants.StatusMsgConstants;
+import springboot.usecase.one.constants.StatusMsgConstants.ErrorCode;
 import springboot.usecase.one.exception.CustomExceptionHandler;
 
 public class CommonUtility {
 	private CommonUtility() {
-		throw new CustomExceptionHandler("801","CommonUtility class exception");
+		throw new CustomExceptionHandler(ErrorCode.ERR_CD_801,StatusMsgConstants.COM_UTIL_EXCP);
 	}
 
 	public static String getSHA512(String pwd) throws NoSuchAlgorithmException {

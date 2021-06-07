@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.usecase.one.constants.CommonConstants;
 import springboot.usecase.one.constants.StatusMsgConstants;
+import springboot.usecase.one.constants.StatusMsgConstants.ErrorCode;
 import springboot.usecase.one.exception.CustomExceptionHandler;
-import springboot.usecase.one.models.CustomerModel;
-import springboot.usecase.one.models.LoginRequest;
+import springboot.usecase.one.models.AddCustomerRequest;
+import springboot.usecase.one.models.LoginCustomerRequest;
 import springboot.usecase.one.service.CustomerService;
 
 @RestController
@@ -27,21 +28,21 @@ public class CustomerController {
 	CustomerService customerService;
 
 	@PostMapping(CommonConstants.CUSTOMER_PATH)
-	public String customerRegister(@Valid @RequestBody CustomerModel customerMdl) {
+	public ResponseEntity<Map<String, Object>> customerRegister(@Valid @RequestBody AddCustomerRequest customerMdl) {
 		try {
 			return customerService.addCustomer(customerMdl);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CustomExceptionHandler("701",StatusMsgConstants.INTERNAL_ERR);
+			throw new CustomExceptionHandler(ErrorCode.ERR_CD_721, StatusMsgConstants.INTERNAL_ERR);
 		}
 	}
 
 	@PostMapping(CommonConstants.CUSTOMER_LOGIN_PATH)
-	public ResponseEntity<Map<String, Object>> loginValidation(@Valid @RequestBody LoginRequest login)
+	public ResponseEntity<Map<String, Object>> loginValidation(@Valid @RequestBody LoginCustomerRequest login)
 			throws NoSuchAlgorithmException {
 		try {
 			return customerService.loginValidate(login);
 		} catch (NoSuchAlgorithmException e) {
-			throw new CustomExceptionHandler("702",StatusMsgConstants.INTERNAL_ERR);
+			throw new CustomExceptionHandler(ErrorCode.ERR_CD_722, StatusMsgConstants.INTERNAL_ERR);
 		}
 	}
 }

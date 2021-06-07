@@ -1,7 +1,9 @@
 package springboot.usecase.one.utility;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import springboot.usecase.one.constants.CommonConstants;
 import springboot.usecase.one.constants.StatusMsgConstants;
-import springboot.usecase.one.entity.BankCatalog;
-import springboot.usecase.one.entity.Customer;
-import springboot.usecase.one.entity.CustomerAccount;
-import springboot.usecase.one.entity.CustomerTxns;
+import springboot.usecase.one.constants.StatusMsgConstants.ErrorCode;
+import springboot.usecase.one.entity.BankCatalogEntity;
+import springboot.usecase.one.entity.CustomerAccBeneficiaryEntity;
+import springboot.usecase.one.entity.CustomerAccEntity;
+import springboot.usecase.one.entity.CustomerEntity;
+import springboot.usecase.one.entity.CustomerTxnsEntity;
 import springboot.usecase.one.exception.CustomExceptionHandler;
-import springboot.usecase.one.models.PaymentTxnModel;
 import springboot.usecase.one.repository.BankCatalogRepository;
 import springboot.usecase.one.repository.CustomerAccountRepository;
 import springboot.usecase.one.repository.CustomerRepository;
@@ -35,108 +38,39 @@ public class PaymentServiceUtility {
 	BankCatalogRepository bankCatalogRepository;
 
 	@Transactional
-	public void paymentProcessing(CustomerAccount payerAcc, CustomerAccount benificiaryAcc, BigDecimal txnAmt) {
-		payerAcc.setAccountBalance(payerAcc.getAccountBalance().subtract(txnAmt));
-		benificiaryAcc.setAccountBalance(benificiaryAcc.getAccountBalance().add(txnAmt));
-		CustomerTxns txn = new CustomerTxns();
-		txn.setSenderId(payerAcc.getCustId());
-		txn.setReceiverId(benificiaryAcc.getCustId());
+	public CustomerTxnsEntity paymentProcessing(CustomerEntity customer, CustomerAccEntity custAcc,
+			CustomerAccBeneficiaryEntity custAccBenf, BigDecimal txnAmt, String remark) {
+		custAcc.setAccountBalance(custAcc.getAccountBalance().subtract(txnAmt));
+		CustomerTxnsEntity txn = new CustomerTxnsEntity();
+		txn.setCustomer(customer);
+		txn.setCustomerAccount(custAcc);
+		txn.setCustomerBeneficiaryAccount(custAccBenf);
 		txn.setTrackingId(CommonConstants.TRK + CommonUtility.getDateTime());
 		txn.setTxnAmt(txnAmt);
-		customerAccountRepository.save(payerAcc);
-		customerAccountRepository.save(benificiaryAcc);
+		txn.setTxnRemark(remark);
+		txn.setTxnDate(new Date());
+		customerAccountRepository.save(custAcc);
 		customerTxnsRepository.save(txn);
+		return txn;
 	}
-	
-	
-	
-	public void checkPayerAccDetails(CustomerAccount payerAcc) {
-		if (payerAcc == null) {
-			throw new CustomExceptionHandler("713",StatusMsgConstants.PAYER_ACC_NOT_FOUND);
-		}
-		Optional<BankCatalog> payerBank = bankCatalogRepository.findByBankCode(payerAcc.getBankCode());
-		if (payerBank.isPresent()) {
-			if (!payerBank.get().getActive().equals("A")) {
-				throw new CustomExceptionHandler("714",StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_INACTIVE);
-			}
+
+	@Transactional
+	public void addCustomerAccount(CustomerEntity customer) {
+		List<BankCatalogEntity> bankList = bankCatalogRepository.findByActive(CommonConstants.A);
+		if (!bankList.isEmpty()) {
+			int ranChar = (new Random()).nextInt(bankList.size());
+			customerRepository.save(customer);
+			CustomerAccEntity custAcc = new CustomerAccEntity();
+			custAcc.setCustomer(customer);
+			BankCatalogEntity bank = bankList.get(ranChar);
+			custAcc.setBankCatalog(bank);
+			custAcc.setAccountIfsc(bank.getBankName() + "0000" + (111 + (new Random()).nextInt(999)));
+			custAcc.setAccountNumber(bank.getBankCode() + "0000" + CommonUtility.getDateTime());
+			custAcc.setAccountBalance(new BigDecimal(CommonConstants.DEFAULT_AMT));
+			customerAccountRepository.save(custAcc);
 		} else {
-			throw new CustomExceptionHandler("715",StatusMsgConstants.PAYER + " " + StatusMsgConstants.BANK_NOT_EXIST);
-		}
-	}
-	public void checkBenAccDetails(CustomerAccount benificiaryAcc) {
-		if (benificiaryAcc == null) {
-			throw new CustomExceptionHandler("716",StatusMsgConstants.BEN_ACC_NOT_FOUND);
-		}
-		Optional<BankCatalog> benBank = bankCatalogRepository.findByBankCode(benificiaryAcc.getBankCode());
-		if (benBank.isPresent()) {
-			if (!benBank.get().getActive().equals("A")) {
-				throw new CustomExceptionHandler("717",
-						StatusMsgConstants.BENIFICIARY + " " + StatusMsgConstants.BANK_INACTIVE);
-			}
-		} else {
-			throw new CustomExceptionHandler("718",StatusMsgConstants.BENIFICIARY + " " + StatusMsgConstants.BANK_NOT_EXIST);
-		}
-	}
-	
-	public void checkPayerAccount(CustomerAccount payerAcc) {
-		if (payerAcc == null) {
-			throw new CustomExceptionHandler("719",StatusMsgConstants.PAYER_ACC_NOT_FOUND);
+			throw new CustomExceptionHandler(ErrorCode.ERR_CD_720, StatusMsgConstants.NO_ACTIVE_BANK_AVALABLE);
 		}
 	}
 
-	public void setCreditTxns(PaymentTxnModel txnModel, CustomerAccount payerAcc, CustomerTxns data, long payerId) {
-		Optional<Customer> payer = customerRepository.findById(data.getSenderId());
-		if (payer.isPresent()) {
-			txnModel.setPayerName(payer.get().getName());
-			CustomerAccount payerAccount = customerAccountRepository.findByCustId(payer.get().getId());
-			if (payerAccount != null) {
-				Optional<BankCatalog> payerBank = bankCatalogRepository.findByBankCode(payerAccount.getBankCode());
-				if (payerBank.isPresent()) {
-					txnModel.setPayerbank(payerBank.get().getBankName());
-				}
-			}
-		}
-		
-		Optional<Customer> beneficiary = customerRepository.findById(payerId);
-		if (beneficiary.isPresent()) {
-			txnModel.setBenefeciaryName(beneficiary.get().getName());
-			txnModel.setBenefeciaryMob(beneficiary.get().getMobile());
-		}
-		Optional<BankCatalog> beneficiaryBank = bankCatalogRepository.findByBankCode(payerAcc.getBankCode());
-		if (beneficiaryBank.isPresent()) {
-			txnModel.setBenefeciarybank(beneficiaryBank.get().getBankName());
-		}
-
-		txnModel.setTrackingId(data.getTrackingId());
-		txnModel.setTxnAmt(data.getTxnAmt().toString());
-		txnModel.setStatus(CommonConstants.CREDIT);
-	}
-
-	public void setDebitTxns(PaymentTxnModel txnModel, CustomerAccount payerAcc, CustomerTxns data, long payerId) {
-		Optional<BankCatalog> payerBank = bankCatalogRepository.findByBankCode(payerAcc.getBankCode());
-		if (payerBank.isPresent()) {
-			txnModel.setPayerbank(payerBank.get().getBankName());
-		}
-		Optional<Customer> payer = customerRepository.findById(payerId);
-		if (payer.isPresent()) {
-			txnModel.setPayerName(payer.get().getName());
-		}
-
-		Optional<Customer> beneficiary = customerRepository.findById(data.getReceiverId());
-		if (beneficiary.isPresent()) {
-			txnModel.setBenefeciaryName(beneficiary.get().getName());
-			txnModel.setBenefeciaryMob(beneficiary.get().getMobile());
-			CustomerAccount beneficiaryAccount = customerAccountRepository.findByCustId(beneficiary.get().getId());
-			if (beneficiaryAccount != null) {
-				Optional<BankCatalog> beneficiaryBank = bankCatalogRepository
-						.findByBankCode(beneficiaryAccount.getBankCode());
-				if (beneficiaryBank.isPresent()) {
-					txnModel.setBenefeciarybank(beneficiaryBank.get().getBankName());
-				}
-			}
-		}
-		txnModel.setTxnAmt(data.getTxnAmt().toString());
-		txnModel.setTrackingId(data.getTrackingId());
-		txnModel.setStatus(CommonConstants.DEBIT);
-	}
 }
