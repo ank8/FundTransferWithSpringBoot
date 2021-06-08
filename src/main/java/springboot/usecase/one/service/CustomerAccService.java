@@ -72,8 +72,10 @@ public class CustomerAccService {
 
 	public ResponseEntity<Map<String, Object>> getCustomerAcountDetails(String token, long customerId) {
 		long custId = JwtToken.validateToken(token);
+		System.out.println("cust==>"+custId);
 		if (custId == customerId) {
 			Optional<CustomerEntity> customerOpt = customerRepository.findById(custId);
+			System.out.println("customerOpt==>"+customerOpt.isPresent());
 			Map<String, Object> map = new HashMap<>();
 			map.put(CommonConstants.CUSTOMER_ID, custId);
 			if (customerOpt.isPresent()) {
