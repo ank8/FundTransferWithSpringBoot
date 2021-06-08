@@ -45,10 +45,9 @@ public class CustomerEntity {
 	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
 	List<CustomerAccEntity> customerAccount;
 
-	
 	@OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
 	List<CustomerTxnsEntity> customerTxnsEntity;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -111,10 +110,6 @@ public class CustomerEntity {
 
 	public void setCustomerAccount(List<CustomerAccEntity> customerAccount) {
 		this.customerAccount = customerAccount;
-	}
-
-	public CustomerEntity() {
-		super();
 	}
 
 	public List<CustomerTxnsEntity> getCustomerTxnsEntity() {

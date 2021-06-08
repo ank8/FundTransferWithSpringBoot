@@ -56,17 +56,17 @@ public class BankCatalogService {
 		BankCatalogEntity bank = modelToBank(bankMdl);
 		ExampleMatcher modelMatcher = ExampleMatcher.matching().withIgnorePaths(CommonConstants.ACTIVE);
 		boolean flag = bankCatalogRepository.exists(Example.of(bank, modelMatcher));
-		if (flag) {
-			Map<String, Object> map = new HashMap<>();
-			map.put(CommonConstants.BANK, bankCatalogRepository.save(bank));
-			map.put(CommonConstants.RESPONSE,
-					new CommonResponse(ErrorCode.ERR_CD_704, StatusMsgConstants.BANK_UPDATED_SUCCESS));
-			return new ResponseEntity<>(map, HttpStatus.OK);
+		if (!flag) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(ErrorCode.ERR_CD_705, StatusMsgConstants.BANK_NOT_EXIST);
+			}
+			throw new CustomExceptionHandler(ErrorCode.ERR_CD_705, StatusMsgConstants.BANK_NOT_EXIST);
 		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(ErrorCode.ERR_CD_705, StatusMsgConstants.BANK_NOT_EXIST);
-		}
-		throw new CustomExceptionHandler(ErrorCode.ERR_CD_705, StatusMsgConstants.BANK_NOT_EXIST);
+		Map<String, Object> map = new HashMap<>();
+		map.put(CommonConstants.BANK, bankCatalogRepository.save(bank));
+		map.put(CommonConstants.RESPONSE,
+				new CommonResponse(ErrorCode.ERR_CD_704, StatusMsgConstants.BANK_UPDATED_SUCCESS));
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
 	public ResponseEntity<Map<String, Object>> deleteBank(Long id) {

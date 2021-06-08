@@ -69,7 +69,6 @@ public class BankCatalogEntity {
 	}
 
 	protected BankCatalogEntity() {
-		super();
 	}
 
 	public BankCatalogEntity(Long id, String bankName, Long bankCode, String active) {

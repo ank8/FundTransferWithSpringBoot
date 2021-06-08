@@ -25,8 +25,8 @@ import springboot.usecase.one.entity.CustomerAccEntity;
 import springboot.usecase.one.entity.CustomerEntity;
 import springboot.usecase.one.exception.CustomExceptionHandler;
 import springboot.usecase.one.models.AddAccountRequest;
-import springboot.usecase.one.models.CustomerAccResponse;
 import springboot.usecase.one.models.CommonResponse;
+import springboot.usecase.one.models.CustomerAccResponse;
 import springboot.usecase.one.repository.BankCatalogRepository;
 import springboot.usecase.one.repository.CustomerAccountRepository;
 import springboot.usecase.one.repository.CustomerRepository;
@@ -72,10 +72,8 @@ public class CustomerAccService {
 
 	public ResponseEntity<Map<String, Object>> getCustomerAcountDetails(String token, long customerId) {
 		long custId = JwtToken.validateToken(token);
-		System.out.println("cust==>"+custId);
 		if (custId == customerId) {
 			Optional<CustomerEntity> customerOpt = customerRepository.findById(custId);
-			System.out.println("customerOpt==>"+customerOpt.isPresent());
 			Map<String, Object> map = new HashMap<>();
 			map.put(CommonConstants.CUSTOMER_ID, custId);
 			if (customerOpt.isPresent()) {
